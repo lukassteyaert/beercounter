@@ -1,18 +1,24 @@
+from flask import Flask, render_template, redirect, url_for
+
+app = Flask("beercounter")
+
 COUNTER = 0
 
 
-def print_counter():
-    print "counter =", COUNTER
-
-
 def increase_counter(inc=1):
-   global COUNTER
-   COUNTER+= inc
+    global COUNTER
+    COUNTER += inc
 
 
-for i in [5,-3,7,8]:
+@app.route("/")
+def index():
+    return render_template("index.html", count=COUNTER, title="Beer Counter")
 
 
+@app.route("/increase", methods=['POST'])
+def increase():
+    increase_counter()
+    return redirect(url_for('index'))
 
-    increase_counter(i)
-    print_counter()
+if __name__ == "__main__":
+    app.run(debug=True)
